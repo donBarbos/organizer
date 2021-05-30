@@ -5,16 +5,12 @@
 ## How to run a bot on a server
 - download code from github
     ```
-    git clone https://github.com/DONSIMON92/organizer-bot.git
-    ```
-    or (if you have official github CLI)
-    ```
-    gh repo clone DONSIMON92/organizer-bot
+    git clone git@github.com:DONSIMON92/organizer-bot.git
     ```
 - create a virtual environment and activate it
     ```
-    python3 -m venv .env
-    source .env/bin/activate
+    python3 -m venv .venv
+    source .venv/bin/activate
     ```
 - import modules from requirements.txt
     ```
@@ -22,7 +18,7 @@
     ```
 - to connect your bot's token (put your token that [BotFather](https://t.me/BotFather "https://t.me/BotFather") issued instead of ellipsis)
     ```
-    echo "BOT_TOKEN = '...'" >> config.py
+    echo "BOT_TOKEN = '...'" > .env
     ```
 - start bot
     ```
