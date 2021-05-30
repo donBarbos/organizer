@@ -1,8 +1,10 @@
 __pycache__/
-multitask.db
-config.py
-.venv
-.env
-
-# if I use IDE
 .idea/
+logs/
+*.log
+*.db
+.cache
+.env
+.venv
+env/
+venv/
