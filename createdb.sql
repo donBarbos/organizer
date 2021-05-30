@@ -5,15 +5,17 @@ CREATE TABLE IF NOT EXISTS Users(
 
 CREATE TABLE IF NOT EXISTS WeeklyAffairs(
     user_id INTEGER REFERENCES Users(user_id),
-    day INTEGER,
-    time INTEGER,
+    note_id INTEGER,
+    weekday INTEGER,
+    time VARCHAR(6),
     text TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Affairs(
     user_id INTEGER REFERENCES Users(user_id),
-    date INTEGER,
-    time INTEGER,
+    note_id INTEGER,
+    date VARCHAR(10),
+    time VARCHAR(6),
     text TEXT NOT NULL
 );
 
