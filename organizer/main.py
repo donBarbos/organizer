@@ -1,4 +1,3 @@
-import re
 import os
 import asyncio
 
@@ -10,9 +9,11 @@ from aiogram.types import InlineKeyboardButton
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
 from aiogram.utils import executor
-from db import init_database, verification, join, get_affair, get_quick_affair, get_weekly_affairs, get_list_today
 
-logger.add('logs/debug.log', format='{time} {level} {message}', level='DEBUG', rotation='10 KB', compression='zip')
+from db import init_database, verification, join, get_affair, get_quick_affair, get_weekly_affairs, get_list_today
+from scan import search_time
+
+logger.add('../logs/debug.log', format='{time} {level} {message}', level='DEBUG', rotation='10 KB', compression='zip')
 
 
 load_dotenv()
@@ -24,6 +25,7 @@ init_database()
 
 @dp.message_handler(commands=['start'])
 async def start_message(message: types.Message):
+    """приветственное сообщение."""
     if await verification(message.from_user.id):
         await bot.send_message(message.chat.id, 'Привет, мы уже работали раньше.\n'
                                                 'Ваши записи сохранены.\n')
@@ -40,8 +42,8 @@ async def start_message(message: types.Message):
         await bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAIEqF5VL5ozeLnmwSaOJAbKQ'
                                                 'DQAAfidjQACYwkAAgk7OxMAAVFVxKRh8u0YBA')
         await bot.send_message(message.chat.id, '[О боте]\n'
-                                                'Это приложение создано для планирования дел.'
-                                                'С помощью данного бота вы можете создавать заметки'
+                                                'Это приложение создано для планирования дел. '
+                                                'С помощью данного бота вы можете создавать заметки. '
                                                 'А в установленное время вам будут приходить уведомления.\n'
                                                 'Чтобы ознакомиться с командами нажмите /commands.')
 
@@ -50,27 +52,30 @@ async def start_message(message: types.Message):
 
 @dp.message_handler(commands=['commands'])
 async def list_commands(message: types.Message):
+    """вывод списка команд бота."""
     await bot.send_message(message.chat.id, 'Полный список команд, на которые отвечает бот:\n\n'
                                             '/new - сделать новую заметку\n'
-                                            '/info - информация о боте\n'
+                                            '/info или /help - информация о боте\n'
                                             '/today - список заметок на день\n'
                                             '/contacts - информация о создателе и код программы\n')
 
 
 @dp.message_handler(commands=['today'])
 async def give_list_today(message: types.Message):
+    """вывод списка дел, запланированных на сегодня."""
     list_today = await get_list_today(message.from_user.id)
-    if list_today is False:
-        await bot.send_message(message.chat.id, 'на сегодня записей не найдено')
-    else:
+    if list_today:
+        list_today = '\n'.join(list_today)
         await bot.send_message(message.chat.id, 'Список дел на сегодня:\n'
                                                 f'{list_today}')
+    else:
+        await bot.send_message(message.chat.id, 'на сегодня записей не найдено')
 
 
 @dp.message_handler(commands=['info', 'help'])
 async def give_info(message: types.Message):
-    await bot.send_message(message.chat.id, '[О боте]\n'
-                                            'Это приложение создано для планирования дел.'
+    """цель данного бота."""
+    await bot.send_message(message.chat.id, '[О боте]\n Это приложение создано для планирования дел.'
                                             'С помощью данного бота вы можете создавать заметки'
                                             'А в установленное время вам будут приходить уведомления.\n'
                                             'Чтобы ознакомиться с командами нажмите /commands.')
@@ -78,6 +83,7 @@ async def give_info(message: types.Message):
 
 @dp.message_handler(commands=['contacts'])
 async def give_contacts(message: types.Message):
+    """ссылка на код проекта """
     btn_link = types.InlineKeyboardButton(text='Перейти на GitHub', url='https://github.com/DONSIMON92/organizer-bot')
     keyboard_link = types.InlineKeyboardMarkup().add(btn_link)
     await bot.send_message(message.chat.id, 'Код проекта доступен на GitHub', reply_markup=keyboard_link)
@@ -112,58 +118,21 @@ async def process_text(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(state=Form.wait_type)
 async def process_type(callback_query: types.CallbackQuery, state: FSMContext):
-    async with state.proxy() as data:
-        data['wait_type'] = bot.callback_query.message.answer
+    current_state = await state.get_state()
+    if current_state == 'timer':
+        async with state.proxy() as data:
+            data['wait_type'] = 'timer'
+    else:
+        await bot.send_message(callback_query.from_user.id, current_state)
 
-    print(callback_query.message.answer)
+    print(current_state)
     await bot.send_message(callback_query.from_user.id, '🕛 Напишите время, через которое вы получите напоминание.')
 
 
 @dp.message_handler(state=Form.wait_time_txt)
 async def process_timer(message: types.Message, state: FSMContext):
     time_txt = message.text
-    time_txt = re.sub(r'и ', '', time_txt)
-    time_txt = re.sub(r'через ', '', time_txt)
-    patterns_hour = ['часов', 'часа', 'час', 'ч']
-    patterns_minute = ['минута', 'минуты', 'минуту', 'минут', 'мин', 'м']
-    patterns_second = ['секунда', 'секунды', 'секунду', 'секунд', 'сек', 'с']
-
-    try:
-        for pattern in patterns_hour:
-            if re.search(pattern, time_txt, flags=re.IGNORECASE):
-                result = re.split(pattern, time_txt, flags=re.IGNORECASE)
-                time_from_hour = 3600 * int(re.search(r'\d{1,3}',   # в первом элементе время в часах
-                                            result[0]).group(0))
-                time_txt = str(result[1])  # второй элемент передаётся дальше
-                break
-    except AttributeError:
-        time_from_hour = 0
-        logger.debug('Error - no pattern(hour) found')
-
-    try:
-        for pattern in patterns_minute:
-            if re.search(pattern, time_txt, flags=re.IGNORECASE):
-                result = re.split(pattern, time_txt, flags=re.IGNORECASE)
-                time_from_min = 60 * int(re.search(r'\d{1,3}',
-                                         result[0]).group(0))
-                time_txt = str(result[1])
-                break
-    except AttributeError:
-        time_from_min = 0
-        logger.debug('Error - no pattern(minute) found')
-
-    try:
-        for pattern in patterns_second:
-            if re.search(pattern, time_txt, flags=re.IGNORECASE):
-                result = re.split(pattern, time_txt, flags=re.IGNORECASE)
-                time_from_sec = int(re.search(r'\d{1,6}',
-                                    result[0]).group(0))
-                break
-    except AttributeError:
-        time_from_sec = 0
-        logger.debug('Error - no pattern(second) found')
-
-    time_wait = time_from_hour + time_from_min + time_from_sec
+    time_wait = await search_time(time_txt)     # поиск времени в тексте
     async with state.proxy() as data:
         data['wait_time_txt'] = time_wait
     await state.finish()
@@ -174,24 +143,16 @@ async def process_timer(message: types.Message, state: FSMContext):
 @dp.callback_query_handler(lambda c: c.data == 'clock')
 async def get_btn_clock(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
-    await bot.send_message(callback_query.from_user.id,
-                           '🕛 Выберите дату и время')
+    await bot.send_message(callback_query.from_user.id, '🕛 Выберите дату и время')
 
 
 @dp.message_handler()
 async def unknown_message(message: types.Message):
     if not message.is_command():
-        await bot.send_message(message.chat.id, '❌ Я не умею работать с данным форматом. '
-                                                'Пришлите мне текстовое сообщение.')
+        await bot.send_message(message.chat.id, '❌ Я не умею работать с данным форматом.')
     else:
-        await message.answer('❌ Некорректная команда.\nЧтобы ознакомиться с командами нажмите на /commands')
-
-
-# Альтернативный вариант
-# @dp.message_handler()
-# async def unknown_message(message: types.Message):
-#     await bot.send_message(message.chat.id,
-#                            '🤷 Не понимаю вас.' )
+        await message.answer('❌ Некорректная команда.\n'
+                             'Чтобы ознакомиться с командами нажмите на /commands')
 
 
 if __name__ == '__main__':
