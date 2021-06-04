@@ -1,6 +1,6 @@
 # [Telegram-bot](https://t.me/Multitask_4Bot "https://t.me/Multitask_4Bot") for reminders
 
-[![Build Status](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml/badge.svg?branch=master)](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml)
+[![Build Status](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml/badge.svg)](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml)
 
 > *you must provide yourself with a bot id in advance. you can register your bot with [BotFather](https://t.me/BotFather "https://t.me/BotFather")*
 
