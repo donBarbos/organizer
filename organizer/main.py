@@ -1,17 +1,17 @@
-import os
 import asyncio
+import os
 
-from loguru import logger
-from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.types import InlineKeyboardButton
-from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.types import InlineKeyboardButton
 from aiogram.utils import executor
+from dotenv import load_dotenv
+from loguru import logger
 
-from db import init_database, verification, join, get_affair, get_quick_affair, get_weekly_affairs, get_list_today
-from scan import search_time
+from .db import get_list_today, init_database, join, verification
+from .scan import search_time
 
 logger.add('../logs/debug.log', format='{time} {level} {message}', level='DEBUG', rotation='10 KB', compression='zip')
 

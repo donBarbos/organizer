@@ -3,6 +3,7 @@ import re
 from loguru import logger
 
 
+# flake8: noqa: C901
 async def search_time(text: str) -> int:
     """осуществляем поиск времени в предложении."""
     text = re.sub(r'и ', '', text)
@@ -27,8 +28,7 @@ async def search_time(text: str) -> int:
         for pattern in patterns_minute:
             if re.search(pattern, text, flags=re.IGNORECASE):
                 result = re.split(pattern, text, flags=re.IGNORECASE)
-                time_from_min = 60 * int(re.search(r'\d{1,3}',
-                                         result[0]).group(0))
+                time_from_min = 60 * int(re.search(r'\d{1,3}', result[0]).group(0))
                 text = str(result[1])
                 break
     except AttributeError:
@@ -39,8 +39,7 @@ async def search_time(text: str) -> int:
         for pattern in patterns_second:
             if re.search(pattern, text, flags=re.IGNORECASE):
                 result = re.split(pattern, text, flags=re.IGNORECASE)
-                time_from_sec = int(re.search(r'\d{1,6}',
-                                    result[0]).group(0))
+                time_from_sec = int(re.search(r'\d{1,6}', result[0]).group(0))
                 break
     except AttributeError:
         time_from_sec = 0
