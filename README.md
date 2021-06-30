@@ -1,6 +1,6 @@
-# [Telegram-bot](https://t.me/Multitask_4Bot "https://t.me/Multitask_4Bot") for reminders
+# [Telegram bot](https://t.me/Multitask_4Bot "https://t.me/Multitask_4Bot") for reminders
 
-[![Build Status](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml/badge.svg)](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml) [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/DONSIMON92/organizer/blob/master/LICENSE)
+[![Testing Status](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml/badge.svg)](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml) [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/DONSIMON92/organizer/blob/master/LICENSE)
 
 > *you must provide yourself with a bot id in advance. you can register your bot with [BotFather](https://t.me/BotFather "https://t.me/BotFather")*
 
@@ -12,32 +12,25 @@
     ```
     git clone git@github.com:DONSIMON92/organizer-bot.git
     ```
-- create a virtual environment and activate it
+- configure a virtual environment
     ```
-    python3 -m venv .venv \
-    source .venv/bin/activate
+    pip3 install pipenv \
+    pipenv sync
     ```
-- upgrade pip and import modules from requirements.txt
+- configure environment variables in `.env` file
+
+- start bot in virtual environment
     ```
-    python3 -m pip install --upgrade pip \
-    pip3 install -r requirements.txt
-    ```
-- to connect your bot's token (put your token that [BotFather](https://t.me/BotFather "https://t.me/BotFather") issued instead of ellipsis)
-    ```
-    echo "BOT_TOKEN='...'" > .env
-    ```
-- start bot
-    ```
-    python3 app.py
+    pipenv run python3 -m organizer
     ```
 
-## Start in Docker
+## Launch in Docker
 
 - download code from github
     ```
     git clone git@github.com:DONSIMON92/organizer-bot.git
     ```
-- put your telegram API into BOT_TOKEN variable in Dockerfile
+- configure environment variables in Dockerfile
 
 - building the docker image
     ```
@@ -47,3 +40,27 @@
     ```
     docker run --name organizer -d organizer-bot
     ```
+
+# Environment variables
+
+- `BOT_TOKEN` — Telegram bot token
+- `PG_NAME` — the name of the PostgreSQL database
+- `PG_USER` — the username used to authenticate
+- `PG_PASSWORD` — password used to authenticate
+- `PG_HOST` — host name or an IP address PostgreSQL database
+- `PG_PORT` — connection port number (defaults to 5432 if not provided)
+- `REDIS_HOST` - host name or an IP address Redis database 
+- `REDIS_PASSWORD` - Redis database password, empty by default
+- `REDIS_PORT` - port from Redis database
+
+> *I use Redis for Finite State Machine, and PostgreSQL as Database for storing notes*
+
+# Tech Stack
+
+- `aiogram` — asynchronous framework for Telegram Bot API
+- `asyncpg` — asynchronous PostgreSQL database client library
+- `pipenv` - development workflow
+- `loguru` — third party library for logging in Python
+- `docker` — to automate deployment
+- `postgres` — powerful, open source object-relational database system
+- `redis` — an in-memory data structure store
