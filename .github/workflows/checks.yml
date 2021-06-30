@@ -1,4 +1,4 @@
-name: build
+name: Tests
 
 on:
   push:
@@ -21,7 +21,13 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install flake8 flake8-bugbear flake8-builtins flake8-import-order flake8-polyfill flake8-quotes flake8-variables-names
-      - name: Lint with flake8
-        run: flake8 --exclude=__pycache__,createdb.sql --ignore B305 --max-complexity 10 --max-line-length=120 --import-order-style google --inline-quotes="'" organizer
+          pip install pipenv
+          pipenv sync --dev
+      - name: Lint check
+        run: flake8 organizer
+#      - name: Launch check
+#        run: python${{ matrix.python-version }} -m organizer
+#      - name: Dockerfile check
+#        run: |
+#          docker build --no-cache=True -t organizer-bot .
+#          docker run --name organizer -d organizer-bot
