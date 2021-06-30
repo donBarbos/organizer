@@ -38,7 +38,7 @@
     ```
 - start bot
     ```
-    docker run --name organizer -d organizer-bot
+    docker run --name organizer -i -t -d organizer-bot /bin/bash
     ```
 
 # Environment variables
