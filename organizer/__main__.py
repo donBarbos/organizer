@@ -3,14 +3,13 @@ import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.utils import executor
 from loguru import logger
 import uvloop  # running only linux
 
 from .commands import set_default_commands
-from .handlers import setup
 from .db import Database
+from .handlers import setup
 
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 logger.add('logs/debug.log', format='{time} {level} {message}', level='DEBUG', rotation='10 KB', compression='zip')

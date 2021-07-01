@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from loguru import logger
 import asyncpg
+from loguru import logger
 
 
 class Database(object):
@@ -35,7 +35,7 @@ class Database(object):
 
     async def add_user(self, user_id: int, name: str) -> None:
         """заносим нового пользователя в БД."""
-        self.pool.execute(f'INSERT INTO Users VALUES({user_id}, \'{name}\')')
+        self.pool.execute(f"INSERT INTO Users VALUES({user_id}, '{name}')")
         logger.info(f'new user added | user_id: {user_id}; name: {name}')
         # self.pool.commit()
 
@@ -53,7 +53,7 @@ class Database(object):
         response = self.pool.fetch(f'SELECT * FROM WeeklyNotes WHERE user_id={user_id}')
         num = len(response) + 1
         note_id = user_id + num
-        self.pool.execute(f'INSERT INTO WeeklyNotes VALUES({user_id}, {note_id}, {weekday}, \'{time}\', \'{text}\')')
+        self.pool.execute(f"INSERT INTO WeeklyNotes VALUES({user_id}, {note_id}, {weekday}, '{time}', '{text}')")
         logger.info(f'create weekly notes | user_id: {user_id}; note_id: {note_id}')
         self.pool.commit()
 
@@ -62,7 +62,7 @@ class Database(object):
         response = self.pool.fetch(f'SELECT * FROM Notes WHERE user_id={user_id}')
         num = len(response) + 1
         note_id = user_id + num
-        self.pool.execute(f'INSERT INTO Notes VALUES({user_id}, {note_id}, {date}, \'{time}\', \'{text}\')')
+        self.pool.execute(f"INSERT INTO Notes VALUES({user_id}, {note_id}, {date}, '{time}', '{text}')")
         logger.info(f'create notes | user_id: {user_id}; note_id: {note_id}')
         self.pool.commit()
 
@@ -89,7 +89,7 @@ class Database(object):
             response = False
 
         today = datetime.now().date()
-        records = self.pool.fetch(f'SELECT text, time FROM Notes WHERE user_id={user_id} AND date=\'{today}\'')
+        records = self.pool.fetch(f"SELECT text, time FROM Notes WHERE user_id={user_id} AND date='{today}'")
         if records:
             for row in records:
                 for elem in row[::2]:

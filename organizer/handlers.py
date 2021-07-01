@@ -1,6 +1,6 @@
 import asyncio
 
-from aiogram import types, Dispatcher
+from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import InlineKeyboardButton
@@ -10,13 +10,14 @@ from .scan import search_time
 
 
 async def setup(dispatcher: Dispatcher, bot, db):
-    dispatcher.register_message_handler(start_message, commands=['start'])
-    dispatcher.register_message_handler(give_info, commands=['help', 'info'])
+    dispatcher.register_message_handler(start_message, commands=['start'], bot=bot, db=db)
+    dispatcher.register_message_handler(give_info, commands=['help', 'info'], bot=bot)
+    dispatcher.register_message_handler(give_list_today, commands=['today'], bot=bot, db=db)
     logger.info('register all message handlers')
 
 
 # @dp.message_handler(commands='start')
-async def start_message(message: types.Message):
+async def start_message(message: types.Message, bot, db):
     """приветственное сообщение."""
     if await db.verification(message.from_user.id):
         await bot.send_message(message.chat.id, 'Привет, мы уже работали раньше.\n'
@@ -43,7 +44,7 @@ async def start_message(message: types.Message):
 
 
 # @dp.message_handler(commands=('help', 'info'))
-async def give_info(message: types.Message):
+async def give_info(message: types.Message, bot):
     """цель данного бота."""
     await bot.send_message(message.chat.id, '[О боте]\n Это приложение создано для планирования дел.'
                                             'С помощью данного бота вы можете создавать заметки'
@@ -58,7 +59,7 @@ async def give_info(message: types.Message):
 
 
 # @dp.message_handler(commands='today')
-async def give_list_today(message: types.Message):
+async def give_list_today(message: types.Message, bot, db):
     """вывод списка дел, запланированных на сегодня."""
     list_today = await db.get_list_today(message.from_user.id)
     if list_today:
@@ -70,7 +71,7 @@ async def give_list_today(message: types.Message):
 
 
 # @dp.message_handler(commands='contacts')
-async def give_contacts(message: types.Message):
+async def give_contacts(message: types.Message, bot):
     """ссылка на код проекта."""
     btn_link = types.InlineKeyboardButton(text='Перейти на GitHub', url='https://github.com/DONSIMON92/organizer-bot')
     keyboard_link = types.InlineKeyboardMarkup().add(btn_link)
@@ -78,7 +79,7 @@ async def give_contacts(message: types.Message):
 
 
 # @dp.message_handler(commands='settings')
-async def give_settings(message: types.Message):
+async def give_settings(message: types.Message, bot, db):
     """справка по настройкам."""
     name = await db.get_name(message.from_user.id)
     lang = await db.get_lang(message.from_user.id)
@@ -101,7 +102,7 @@ async def get_task(message: types.Message):
 
 
 # @dp.message_handler(state=Form.wait_text)
-async def process_text(message: types.Message, state: FSMContext):
+async def process_text(message: types.Message, state: FSMContext, bot):
     async with state.proxy() as data:
         data['wait_text'] = message.text
 
@@ -116,7 +117,7 @@ async def process_text(message: types.Message, state: FSMContext):
 
 
 # @dp.callback_query_handler(state=Form.wait_type)
-async def process_type(callback_query: types.CallbackQuery, state: FSMContext):
+async def process_type(callback_query: types.CallbackQuery, state: FSMContext, bot):
     current_state = await state.get_state()
     if current_state == 'timer':
         async with state.proxy() as data:
@@ -129,7 +130,7 @@ async def process_type(callback_query: types.CallbackQuery, state: FSMContext):
 
 
 # @dp.message_handler(state=Form.wait_time_txt)
-async def process_timer(message: types.Message, state: FSMContext):
+async def process_timer(message: types.Message, state: FSMContext, bot):
     time_txt = message.text
     time_wait = await search_time(time_txt)     # поиск времени в тексте
     async with state.proxy() as data:
@@ -140,13 +141,13 @@ async def process_timer(message: types.Message, state: FSMContext):
 
 
 # @dp.callback_query_handler(lambda c: c.data == 'clock')
-async def get_btn_clock(callback_query: types.CallbackQuery):
+async def get_btn_clock(callback_query: types.CallbackQuery, bot):
     await bot.answer_callback_query(callback_query.id)
     await bot.send_message(callback_query.from_user.id, '🕛 Выберите дату и время')
 
 
 # @dp.message_handler()
-async def unknown_message(message: types.Message):
+async def unknown_message(message: types.Message, bot):
     if not message.is_command():
         await bot.send_message(message.chat.id, '❌ Я не умею работать с данным форматом.')
     else:
