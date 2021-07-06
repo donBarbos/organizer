@@ -19,6 +19,6 @@ flake8-quotes = "*"
 flake8-variables-names = "*"
 pyflakes = "*"
 pep8-naming = "*"
-
-[requires]
-python_version = "3.9"
+flake8-black = "*"
+black = "==21.6b0"
+mypy = "*"
