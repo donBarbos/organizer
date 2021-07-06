@@ -25,9 +25,5 @@ jobs:
           pipenv install --system --dev
       - name: Lint check
         run: flake8 organizer
-#      - name: Launch check
-#        run: python${{ matrix.python-version }} -m organizer
-#      - name: Dockerfile check
-#        run: |
-#          docker build --no-cache=True -t organizer-bot .
-#          docker run --name organizer -d organizer-bot
+      - name: Dockerfile check
+        run: docker build .
