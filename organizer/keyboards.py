@@ -3,7 +3,7 @@ from aiogram.types import InlineKeyboardButton
 
 
 # клавиатура для ознакомления с кодом
-btn_link = types.InlineKeyboardButton(text='Перейти на GitHub', url='https://github.com/DONSIMON92/organizer-bot')
+btn_link = types.InlineKeyboardButton(text="Перейти на GitHub", url="https://github.com/DONSIMON92/organizer-bot")
 keyboard_link = types.InlineKeyboardMarkup().add(btn_link)
 
 # клавиатура с настройками
@@ -12,5 +12,5 @@ keyboard_link = types.InlineKeyboardMarkup().add(btn_link)
 # keyboard_settings = types.InlineKeyboardMarkup().add(btn_link)
 
 # клавиатура для выбора типа заметки
-btn_clock = InlineKeyboardButton('⏰ да', callback_data='note')
-btn_timer = InlineKeyboardButton('⌛ нет', callback_data='weekly_note')
+btn_clock = InlineKeyboardButton("⏰ да", callback_data="note")
+btn_timer = InlineKeyboardButton("⌛ нет", callback_data="weekly_note")
