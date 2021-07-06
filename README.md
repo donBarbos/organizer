@@ -1,6 +1,8 @@
 # [Telegram bot](https://t.me/Multitask_4Bot "https://t.me/Multitask_4Bot") for reminders
 
-[![Testing Status](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml/badge.svg)](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml) [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/DONSIMON92/organizer/blob/master/LICENSE)
+[![Testing Status](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml/badge.svg)](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml)
+[![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/DONSIMON92/organizer/blob/master/LICENSE)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 > *you must provide yourself with a bot id in advance. you can register your bot with [BotFather](https://t.me/BotFather "https://t.me/BotFather")*
 
@@ -36,9 +38,13 @@
     ```
     docker build -t organizer-bot .
     ```
-- start bot
+- start a container
     ```
-    docker run --name organizer -i -t -d organizer-bot /bin/bash
+    docker run --name organizer -i -t -d organizer-bot
+    ```
+- execute an interactive bash shell on the container
+    ```
+    docker exec -it organizer bash
     ```
 
 # Environment variables
