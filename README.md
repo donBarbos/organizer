@@ -47,6 +47,18 @@
     docker exec -it organizer bash
     ```
 
+
+- configure environment variables in `.env` file
+
+- building the docker image
+    ```
+    docker-compose build
+    ```
+- start service
+    ```
+    docker-compose up
+    ```
+
 # Environment variables
 
 - `BOT_TOKEN` — Telegram bot token
