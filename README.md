@@ -14,16 +14,16 @@
     ```
     git clone git@github.com:DONSIMON92/organizer-bot.git
     ```
-- configure a virtual environment
+- install python package manager [Poetry](https://python-poetry.org) and install dependencies
     ```
-    pip3 install pipenv \
-    pipenv sync
+    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+    poetry install
     ```
 - configure environment variables in `.env` file
 
 - start bot in virtual environment
     ```
-    pipenv run python3 -m organizer
+    poetry run python -m organizer
     ```
 
 ## Launch in Docker
@@ -32,22 +32,6 @@
     ```
     git clone git@github.com:DONSIMON92/organizer-bot.git
     ```
-- configure environment variables in Dockerfile
-
-- building the docker image
-    ```
-    docker build -t organizer-bot .
-    ```
-- start a container
-    ```
-    docker run --name organizer -i -t -d organizer-bot
-    ```
-- execute an interactive bash shell on the container
-    ```
-    docker exec -it organizer bash
-    ```
-
-
 - configure environment variables in `.env` file
 
 - building the docker image
@@ -77,7 +61,7 @@
 
 - `aiogram` — asynchronous framework for Telegram Bot API
 - `asyncpg` — asynchronous PostgreSQL database client library
-- `pipenv` - development workflow
+- `poetry` - development workflow
 - `loguru` — third party library for logging in Python
 - `docker` — to automate deployment
 - `postgres` — powerful, open source object-relational database system

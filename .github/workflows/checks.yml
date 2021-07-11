@@ -23,9 +23,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pipenv
-          pipenv install --system --dev
-          python3 -m pip install typed-ast
+          pip install poetry
+          poetry install
 
       - name: Lint check
-        run: flake8 organizer
+        run: poetry run flake8 organizer
