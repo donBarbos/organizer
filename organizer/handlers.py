@@ -3,16 +3,9 @@ import asyncio
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.types import InlineKeyboardButton
 
-from organizer.__main__ import bot, db, dp
+from organizer.loader import bot, db, dp
 from organizer.scan import search_time
-
-
-# async def setup(dispatcher: Dispatcher, bot, db):
-#     dispatcher.register_message_handler(start_message, commands=['start'], bot=bot, db=db)
-#     dispatcher.register_message_handler(give_info, commands=['help', 'info'], bot=bot)
-#     dispatcher.register_message_handler(give_list_today, commands=['today'], bot=bot, db=db)
 
 
 @dp.message_handler(commands="start")
@@ -35,7 +28,7 @@ async def start_message(message: types.Message):
         await db.add_users(message.from_user.id, name)
         await bot.send_sticker(
             message.chat.id,
-            "CAACAgIAAxkBAAIEqF5VL5ozeLnmwSaOJAbKQ" "DQAAfidjQACYwkAAgk7OxMAAVFVxKRh8u0YBA",
+            "CAACAgIAAxkBAAIEqF5VL5ozeLnmwSaOJAbKQDQAAfidjQACYwkAAgk7OxMAAVFVxKRh8u0YBA",
         )
         await bot.send_message(
             message.chat.id,
@@ -67,7 +60,7 @@ async def give_info(message: types.Message):
     )
 
 
-# @dp.message_handler(commands='today')
+@dp.message_handler(commands="today")
 async def give_list_today(message: types.Message, bot, db):
     """вывод списка дел, запланированных на сегодня."""
     list_today = await db.get_list_today(message.from_user.id)
@@ -78,7 +71,7 @@ async def give_list_today(message: types.Message, bot, db):
         await bot.send_message(message.chat.id, "на сегодня записей не найдено")
 
 
-# @dp.message_handler(commands='contacts')
+@dp.message_handler(commands="contacts")
 async def give_contacts(message: types.Message, bot):
     """ссылка на код проекта."""
     btn_link = types.InlineKeyboardButton(text="Перейти на GitHub", url="https://github.com/DONSIMON92/organizer-bot")
@@ -86,7 +79,7 @@ async def give_contacts(message: types.Message, bot):
     await bot.send_message(message.chat.id, "Код проекта доступен на GitHub", reply_markup=keyboard_link)
 
 
-# @dp.message_handler(commands='settings')
+@dp.message_handler(commands="settings")
 async def give_settings(message: types.Message, bot, db):
     """справка по настройкам."""
     name = await db.get_name(message.from_user.id)
@@ -103,21 +96,21 @@ class Form(StatesGroup):
     wait_time_txt = State()
 
 
-# @dp.message_handler(commands='new')     # дописать фильтр отправляемых заметок
+@dp.message_handler(commands="new")  # дописать фильтр отправляемых заметок
 async def get_task(message: types.Message):
     await Form.wait_text.set()
     await message.answer("Отправьте текст")
 
 
-# @dp.message_handler(state=Form.wait_text)
+@dp.message_handler(state=Form.wait_text)
 async def process_text(message: types.Message, state: FSMContext, bot):
     async with state.proxy() as data:
         data["wait_text"] = message.text
 
     await Form.next()
     keyboard_time = types.InlineKeyboardMarkup()
-    btn_timer = InlineKeyboardButton("⌛ таймер", callback_data="timer")
-    btn_clock = InlineKeyboardButton("⏰ часы", callback_data="clock")
+    btn_timer = types.InlineKeyboardButton("⌛ таймер", callback_data="timer")
+    btn_clock = types.InlineKeyboardButton("⏰ часы", callback_data="clock")
     keyboard_time.add(btn_timer, btn_clock)
     await bot.send_message(
         message.chat.id,
@@ -127,7 +120,7 @@ async def process_text(message: types.Message, state: FSMContext, bot):
     )
 
 
-# @dp.callback_query_handler(state=Form.wait_type)
+@dp.callback_query_handler(state=Form.wait_type)
 async def process_type(callback_query: types.CallbackQuery, state: FSMContext, bot):
     current_state = await state.get_state()
     if current_state == "timer":
@@ -143,7 +136,7 @@ async def process_type(callback_query: types.CallbackQuery, state: FSMContext, b
     )
 
 
-# @dp.message_handler(state=Form.wait_time_txt)
+@dp.message_handler(state=Form.wait_time_txt)
 async def process_timer(message: types.Message, state: FSMContext, bot):
     time_txt = message.text
     time_wait = await search_time(time_txt)  # поиск времени в тексте
@@ -154,13 +147,13 @@ async def process_timer(message: types.Message, state: FSMContext, bot):
     await asyncio.sleep(time_wait)
 
 
-# @dp.callback_query_handler(lambda c: c.data == 'clock')
+@dp.callback_query_handler(lambda c: c.data == "clock")
 async def get_btn_clock(callback_query: types.CallbackQuery, bot):
     await bot.answer_callback_query(callback_query.id)
     await bot.send_message(callback_query.from_user.id, "🕛 Выберите дату и время")
 
 
-# @dp.message_handler()
+@dp.message_handler()
 async def unknown_message(message: types.Message, bot):
     if not message.is_command():
         await bot.send_message(message.chat.id, "❌ Я не умею работать с данным форматом.")
