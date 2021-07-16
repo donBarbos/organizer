@@ -1,6 +1,3 @@
-from organizer.__main__ import bot, db, dp
-from organizer.commands import set_default_commands
-from organizer.db import Database
-from organizer.scan import search_time
+from organizer.handlers import give_contacts, give_info, give_list_today, give_settings, start_message
 
-__all__ = ["bot", "db", "dp", "set_default_commands", "Database", "search_time"]
+__all__ = ["give_contacts", "give_info", "give_list_today", "give_settings", "start_message"]
