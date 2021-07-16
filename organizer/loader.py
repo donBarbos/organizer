@@ -3,11 +3,12 @@ import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
+from dotenv import load_dotenv
 import uvloop  # running only linux
 
 from organizer.database import Database
 
-
+load_dotenv()
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 token = os.getenv("BOT_TOKEN")
 bot = Bot(token=token, parse_mode="html")
