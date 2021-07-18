@@ -1,9 +1,9 @@
 from aiogram import Dispatcher
 from aiogram.utils import executor
 from loguru import logger
-
 from organizer.commands import set_default_commands
-from organizer.loader import db, dp
+from organizer.loader import db
+from organizer.loader import dp
 
 
 async def startup(dispatcher: Dispatcher):

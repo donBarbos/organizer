@@ -1,7 +1,7 @@
 from datetime import datetime
+from loguru import logger
 
 import asyncpg
-from loguru import logger
 
 
 class Database:

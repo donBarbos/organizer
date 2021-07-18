@@ -1,4 +1,5 @@
-from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.dispatcher.filters.state import State
+from aiogram.dispatcher.filters.state import StatesGroup
 
 
 class Note(StatesGroup):

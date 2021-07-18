@@ -1,11 +1,13 @@
-import asyncio
-
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters.state import State, StatesGroup
-
-from organizer.loader import bot, db, dp
+from aiogram.dispatcher.filters.state import State
+from aiogram.dispatcher.filters.state import StatesGroup
+from organizer.loader import bot
+from organizer.loader import db
+from organizer.loader import dp
 from organizer.scan import search_time
+
+import asyncio
 
 
 @dp.message_handler(commands="start")

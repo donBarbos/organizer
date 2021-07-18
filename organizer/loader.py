@@ -1,12 +1,13 @@
-import asyncio
-import os
-
-from aiogram import Bot, Dispatcher
+from aiogram import Bot
+from aiogram import Dispatcher
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
 from dotenv import load_dotenv
+from organizer.database import Database
+
+import asyncio
+import os
 import uvloop  # running only linux
 
-from organizer.database import Database
 
 load_dotenv()
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())

@@ -1,6 +1,6 @@
-import re
-
 from loguru import logger
+
+import re
 
 
 # flake8: noqa: C901
