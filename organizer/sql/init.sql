@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS Users(
     user_id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(32)
+    name VARCHAR(32),
+    lang VARCHAR(10)
 );
 
 CREATE TABLE IF NOT EXISTS Notes(

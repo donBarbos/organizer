@@ -3,7 +3,7 @@ from aiogram.types import InlineKeyboardButton
 
 
 # клавиатура для ознакомления с кодом
-btn_link = types.InlineKeyboardButton(text="Перейти на GitHub", url="https://github.com/DONSIMON92/organizer-bot")
+btn_link = types.InlineKeyboardButton(text="Перейти на GitHub", url="https://github.com/DONSIMON92/organizer")
 keyboard_link = types.InlineKeyboardMarkup().add(btn_link)
 
 # клавиатура с настройками
