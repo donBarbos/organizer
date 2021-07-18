@@ -1,11 +1,13 @@
-# [Telegram bot](https://t.me/Multitask_4Bot "https://t.me/Multitask_4Bot") for reminders
+<h1 align="center"><em>Telegram bot for reminders.</em></h1>
 
-[![Testing Status](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml/badge.svg)](https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml)
-[![Python](https://img.shields.io/badge/Python-3.7%2B-blue)](https://www.python.org/downloads)
-[![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/DONSIMON92/organizer/blob/master/LICENSE)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+<p align="center">
+<a href="https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml"><img src="https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml/badge.svg" alt="Testing Status"></a>
+<a href="https://www.python.org/downloads"><img src="https://img.shields.io/badge/Python-3.7%2B-blue" alt="Python"></a>
+<a href="https://github.com/DONSIMON92/organizer/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License"></a>
+<a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style"></a>
+<p>
 
-> *you must provide yourself with a bot id in advance. you can register your bot with [BotFather](https://t.me/BotFather "https://t.me/BotFather")*
+<p align="center">a working example of this bot: https://t.me/Multitask_4Bot<p>
 
 # Installation
 
@@ -31,7 +33,7 @@
 
 - download code from github
     ```
-    git clone git@github.com:DONSIMON92/organizer-bot.git
+    git clone https://github.com/DONSIMON92/organizer.git
     ```
 - configure environment variables in `.env` file
 
