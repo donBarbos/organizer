@@ -52,9 +52,9 @@
 - `PG_PASSWORD` — password used to authenticate
 - `PG_HOST` — host name or an IP address PostgreSQL database
 - `PG_PORT` — connection port number (defaults to 5432 if not provided)
-- `REDIS_HOST` - host name or an IP address Redis database 
-- `REDIS_PASSWORD` - Redis database password, empty by default
-- `REDIS_PORT` - port from Redis database
+- `REDIS_HOST` — host name or an IP address Redis database 
+- `REDIS_PASSWORD` — Redis database password, empty by default
+- `REDIS_PORT` — port from Redis database
 
 > *I use Redis for Finite State Machine, and PostgreSQL as Database for storing notes*
 
@@ -62,7 +62,7 @@
 
 - `aiogram` — asynchronous framework for Telegram Bot API
 - `asyncpg` — asynchronous PostgreSQL database client library
-- `poetry` - development workflow
+- `poetry` — development workflow
 - `loguru` — third party library for logging in Python
 - `docker` — to automate deployment
 - `postgres` — powerful, open source object-relational database system
