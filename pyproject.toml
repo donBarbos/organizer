@@ -21,8 +21,13 @@ force_single_line = true
 lines_after_imports = 2
 line_length = 120
 
+[tool.pytest.ini_options]
+testpaths = "tests"
+
 [tool.mypy]
 python_version = "3.7"
+files = "organizer/*.py"
+ignore_missing_imports = true
 warn_return_any = true
 warn_unused_configs = true
 
