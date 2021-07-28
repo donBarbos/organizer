@@ -2,10 +2,13 @@ from datetime import datetime
 from loguru import logger
 
 import asyncpg
+import uvloop  # running only linux
 
 
 class Database:
-    def __init__(self, name, user, password, host, port, loop, pool: asyncpg.pool.Pool) -> None:
+    def __init__(
+        self, name: str, user: str, password: str, host: str, port: str, loop: uvloop.Loop, pool: asyncpg.pool.Pool
+    ) -> None:
         self.name = name
         self.user = user
         self.password = password
@@ -87,7 +90,9 @@ class Database:
             response = False
 
         today = datetime.now().date()
-        records = await self.pool.fetch(f"SELECT text, date_time FROM Notes WHERE user_id={user_id} AND date='{today}'")
+        records = await self.pool.fetch(
+            f"SELECT text, date_time FROM Notes WHERE user_id={user_id} AND date_time BETWEEN '{today}'"
+        )
         if records:
             for row in records:
                 for elem in row[::2]:

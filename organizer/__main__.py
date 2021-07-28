@@ -6,18 +6,18 @@ from organizer.loader import db
 from organizer.loader import dp
 
 
-async def startup(dispatcher: Dispatcher):
+async def startup(dp: Dispatcher) -> None:
     """initialization"""
     await db.init_database()
-    await set_default_commands(dispatcher)
+    await set_default_commands(dp)
     logger.info("bot started")
 
 
-async def shutdown(dispatcher: Dispatcher):
+async def shutdown(dp: Dispatcher) -> None:
     """and need to close Redis and PostgreSQL connection when shutdown"""
     await db.close_database()
-    await dispatcher.storage.close()
-    await dispatcher.storage.wait_closed()
+    await dp.storage.close()
+    await dp.storage.wait_closed()
     logger.info("bot finished")
 
 

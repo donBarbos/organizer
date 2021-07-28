@@ -1,11 +1,12 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State
 from aiogram.dispatcher.filters.state import StatesGroup
 from organizer.loader import bot
 from organizer.loader import db
 from organizer.loader import dp
-from organizer.scan import search_time
+from organizer.scanning import search_time
 
 import asyncio
 
@@ -41,7 +42,7 @@ async def start_message(message: types.Message):
         )
 
 
-@dp.message_handler(commands=("help", "info"))
+@dp.message_handler(commands=("help", "info", "about"))
 async def give_info(message: types.Message):
     """цель данного бота."""
     await bot.send_message(
@@ -90,32 +91,25 @@ async def give_settings(message: types.Message):
 
 @dp.callback_query_handler(lambda c: c.data == "name")
 async def alter_name(callback_query: types.CallbackQuery):
-    await bot.answer_callback_query(callback_query.id, "Как мне к вам обращаться?")
+    await bot.send_message(callback_query.id, "Как мне к вам обращаться?")
+    await bot.answer_callback_query(callback_query.id)
 
 
 @dp.callback_query_handler(lambda c: c.data == "lang")
 async def alter_lang(callback_query: types.CallbackQuery):
+    await bot.send_message(callback_query.id, "Выберите язык:")
     await bot.answer_callback_query(callback_query.id, "Выберите язык:")
 
 
-class Form(StatesGroup):
-    wait_text = State()
-    wait_type = State()
-    wait_time_txt = State()
+class Note(StatesGroup):
+    text = State()
+    kind = State()
+    time = State()
 
 
-@dp.message_handler(commands="new")  # дописать фильтр отправляемых заметок
-async def get_task(message: types.Message):
-    await Form.wait_text.set()
-    await message.answer("📝 Отправьте текст")
-
-
-@dp.message_handler(state=Form.wait_text)
-async def process_text(message: types.Message, state: FSMContext, bot):
-    async with state.proxy() as data:
-        data["wait_text"] = message.text
-
-    await Form.next()
+@dp.message_handler(content_types="text")
+async def text_handler(message: types.Message):
+    Note.text.set()
     keyboard_time = types.InlineKeyboardMarkup()
     btn_timer = types.InlineKeyboardButton("⌛ таймер", callback_data="timer")
     btn_clock = types.InlineKeyboardButton("⏰ часы", callback_data="clock")
@@ -128,12 +122,40 @@ async def process_text(message: types.Message, state: FSMContext, bot):
     )
 
 
-@dp.callback_query_handler(state=Form.wait_type)
+@dp.message_handler(state="*", commands="cancel")
+@dp.message_handler(Text(equals="cancel", ignore_case=True), state="*")
+async def cancel_handler(message: types.Message, state: FSMContext):
+    current_state = await state.get_state()
+    if current_state is None:
+        return
+    await state.finish()
+    await message.reply("Отменено", reply_markup=types.ReplyKeyboardRemove())
+
+
+@dp.message_handler(state=Note.text)
+async def process_text(message: types.Message, state: FSMContext, bot):
+    async with state.proxy() as data:
+        data["text"] = message.text
+
+    await Note.next()
+    keyboard_time = types.InlineKeyboardMarkup()
+    btn_timer = types.InlineKeyboardButton("⌛ таймер", callback_data="timer")
+    btn_clock = types.InlineKeyboardButton("⏰ часы", callback_data="clock")
+    keyboard_time.add(btn_timer, btn_clock)
+    await bot.send_message(
+        message.chat.id,
+        "🤔 Как вы желаете настроить время получения уведомления?\n"
+        "(с помощью таймера или установки определенного времени)",
+        reply_markup=keyboard_time,
+    )
+
+
+@dp.callback_query_handler(state=Note.kind)
 async def process_type(callback_query: types.CallbackQuery, state: FSMContext):
     current_state = await state.get_state()
     if current_state == "timer":
         async with state.proxy() as data:
-            data["wait_type"] = "timer"
+            data["type"] = "timer"
     else:
         await bot.send_message(callback_query.from_user.id, current_state)
 
@@ -144,12 +166,12 @@ async def process_type(callback_query: types.CallbackQuery, state: FSMContext):
     )
 
 
-@dp.message_handler(state=Form.wait_time_txt)
+@dp.message_handler(state=Note.time)
 async def process_timer(message: types.Message, state: FSMContext):
     time_txt = message.text
-    time_wait = await search_time(time_txt)  # поиск времени в тексте
+    time_wait = await search_time(time_txt)
     async with state.proxy() as data:
-        data["wait_time_txt"] = time_wait
+        data["time"] = time_wait
     await state.finish()
     await bot.send_message(f"✅ Новая задача успешно создана. Напоминание придет через {time_wait} сек.")
     await asyncio.sleep(time_wait)
