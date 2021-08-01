@@ -1,5 +1,6 @@
 from datetime import datetime
 from loguru import logger
+from typing import Union
 
 import asyncpg
 import uvloop  # running only linux
@@ -71,7 +72,7 @@ class Database:
     async def get_lang(self, user_id: int) -> str:
         return await self.pool.fetchval(f"SELECT lang FROM Users WHERE user_id={user_id}")
 
-    async def get_list_today(self, user_id: int) -> tuple:
+    async def get_list_today(self, user_id: int) -> Union[tuple]:
         """узнаем список заметок на сегодня из 2х таблиц."""
         index = 1
         list_today = []  # TODO: сделать кортежем () и переделать логику
@@ -104,4 +105,4 @@ class Database:
             if response:
                 return list_today
             else:
-                return False  # return list_today
+                return None
