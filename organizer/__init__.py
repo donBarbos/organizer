@@ -1,4 +1,3 @@
-from organizer.handlers import get_task
 from organizer.handlers import give_contacts
 from organizer.handlers import give_info
 from organizer.handlers import give_list_today
@@ -14,5 +13,4 @@ __all__ = [
     "give_settings",
     "start_message",
     "unknown_message",
-    "get_task",
 ]
