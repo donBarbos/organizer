@@ -13,13 +13,8 @@
 
 ## Running on Local Machine
 
-- download code from github
+- install dependencies using [Poetry](https://python-poetry.org "python package manager")
     ```
-    git clone https://github.com/DONSIMON92/organizer.git
-    ```
-- install python package manager [Poetry](https://python-poetry.org) and install dependencies
-    ```
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
     poetry install
     ```
 - configure environment variables in `.env` file
@@ -31,10 +26,6 @@
 
 ## Launch in Docker
 
-- download code from github
-    ```
-    git clone https://github.com/DONSIMON92/organizer.git
-    ```
 - configure environment variables in `.env` file
 
 - building the docker image
@@ -49,11 +40,11 @@
 # Environment variables
 
 - `BOT_TOKEN` — Telegram bot token
-- `PG_NAME` — the name of the PostgreSQL database
-- `PG_USER` — the username used to authenticate
-- `PG_PASSWORD` — password used to authenticate
 - `PG_HOST` — host name or an IP address PostgreSQL database
+- `PG_NAME` — the name of the PostgreSQL database
+- `PG_PASSWORD` — password used to authenticate
 - `PG_PORT` — connection port number (defaults to 5432 if not provided)
+- `PG_USER` — the username used to authenticate
 - `REDIS_HOST` — host name or an IP address Redis database 
 - `REDIS_PASSWORD` — Redis database password, empty by default
 - `REDIS_PORT` — port from Redis database
