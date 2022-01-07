@@ -6,8 +6,9 @@ COPY . .
 
 RUN apt update && \
     apt install --no-install-recommends -y build-essential curl && \
-    #curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python && \
-    pip install poetry && \
+    /usr/local/bin/python -m pip install --upgrade pip && \
+    pip install --no-cache-dir --upgrade poetry && \
+    poetry config virtualenvs.create false && \
     poetry install --no-dev && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
