@@ -8,8 +8,15 @@ services:
     restart: always
     env_file:
       - .env
+    environment:
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_DB=${PG_NAME}
+      - PGDATA=${PG_DATA}
     ports:
       - ${PG_PORT}:${PG_PORT}
+    expose:
+      - ${PG_PORT}
     volumes:
       - /usr/src/app/data:/var/lib/postgresql/data/pgdata
 
@@ -21,6 +28,8 @@ services:
       - .env
     ports:
       - ${REDIS_PORT}:${REDIS_PORT}
+    expose:
+      - ${REDIS_PORT}
     volumes:
       - /usr/src/app/data:/bitnami/redis/data
 
@@ -30,6 +39,9 @@ services:
     restart: always
     env_file:
       - .env
+    links:
+      - postgres
+      - redis
     depends_on:
       - postgres
       - redis
