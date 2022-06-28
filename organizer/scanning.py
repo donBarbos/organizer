@@ -19,7 +19,7 @@ def search_time(text: str) -> int:
         for pattern in patterns_hour:
             if re.search(pattern, text, flags=re.IGNORECASE):
                 result = re.split(pattern, text, flags=re.IGNORECASE)
-                time_from_hour = re.search(r"\d{1,3}", result[0]).group(0)  # поиск времени
+                time_from_hour = re.search(r"\d{1,3}", result[0]).group(0)
                 time_from_hour = 3600 * int(time_from_hour)  # перевод времени в секунды
                 text = str(result[1])  # второй элемент передаётся дальше
                 break

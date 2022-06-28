@@ -73,7 +73,7 @@ async def give_list_today(message: types.Message):
 @dp.message_handler(commands="contacts")
 async def give_contacts(message: types.Message):
     """ссылка на код проекта."""
-    btn_link = types.InlineKeyboardButton(text="Перейти на GitHub", url="https://github.com/DONSIMON92/organizer")
+    btn_link = types.InlineKeyboardButton(text="Перейти на GitHub", url="https://github.com/donBarbos/organizer")
     keyboard_link = types.InlineKeyboardMarkup().add(btn_link)
     await bot.send_message(message.chat.id, "👨‍💻 Код проекта доступен на GitHub", reply_markup=keyboard_link)
 
