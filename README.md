@@ -1,9 +1,9 @@
 <h1 align="center"><em>Telegram bot for reminders.</em></h1>
 
 <p align="center">
-<a href="https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml"><img src="https://github.com/DONSIMON92/organizer/actions/workflows/checks.yml/badge.svg" alt="Testing Status"></a>
+<a href="https://github.com/donBarbos/organizer/actions/workflows/checks.yml"><img src="https://github.com/donBarbos/organizer/actions/workflows/checks.yml/badge.svg" alt="Testing Status"></a>
 <a href="https://www.python.org/downloads"><img src="https://img.shields.io/badge/Python-3.7%2B-blue" alt="Python"></a>
-<a href="https://github.com/DONSIMON92/organizer/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License"></a>
+<a href="https://github.com/donBarbos/organizer/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License"></a>
 <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg" alt="Code style"></a>
 <p>
 
